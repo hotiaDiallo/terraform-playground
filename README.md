@@ -4,7 +4,7 @@
 2- Run nginx docker container on the EC2 instance 
 
 ## Architecture 
-![Image](/images/images.png)
+![Image](/images/archi.png)
 
 <br>
 
