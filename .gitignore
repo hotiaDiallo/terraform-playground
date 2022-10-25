@@ -15,3 +15,7 @@
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# ignore crash logs
+crash.log
+
