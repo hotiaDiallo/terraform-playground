@@ -18,13 +18,13 @@ Best practices :
     - use data resources to query AZ : it will return the AZ of the region set on the provider block. 
 - add tags : it's important, for example the Cloud Controller Mananger that comes from AWS, orchestrate connecting to the VPC, subnet, worker nodes... So he needs to know which resource in our account he should talk to. 
 
-See the configuration for creating the VPC and Subnet : [vpc.tf]()
+See the configuration for creating the VPC and Subnet : [vpc.tf](https://github.com/hotiaDiallo/terraform-playground/blob/provision-eks/vpc.tf)
 
 ### 2 - Create an EKS cluster and associated resources
 
 we use an [existing eks module](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest)
 
-See the configuration for eks cluster with the minimum configuration : [eks-cluster.tf]()
+See the configuration for eks cluster with the minimum configuration : [eks-cluster.tf](https://github.com/hotiaDiallo/terraform-playground/blob/provision-eks/eks-cluster.tf)
 
 ### Outputs
 
@@ -49,7 +49,8 @@ Prerequities:
 - kubectl installed 
 - aws-iam-authenticator installed (Amazon EKS uses IAM to provide authentication to your Kubernetes cluster through the AWS IAM authenticator for Kubernetes. You can configure the stock kubectl client to work with Amazon EKS by installing the AWS IAM authenticator for Kubernetes and modifying your kubectl configuration file to use it for authentication)
 
-Command: 
+#### Command
+
     aws eks update-kubeconfig --name myapp-eks-cluster --region eu-west-3
 
 Deploy nginx 
