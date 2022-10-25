@@ -4,3 +4,5 @@
 
 ## [EC2 provision with best practices and modules](https://github.com/hotiaDiallo/terraform-playground/tree/deploy-ec2-with-modules)
 
+## [Provision EKS cluster and run nginx docker container](https://github.com/hotiaDiallo/terraform-playground/tree/provision-eks)
+
