@@ -1,6 +1,7 @@
 # Automate AWS Infrastructure 
 
 1- Provision an EC2 instance on AWS insfrastruture 
+
 2- Run nginx docker container on the EC2 instance 
 
 ## Architecture 
