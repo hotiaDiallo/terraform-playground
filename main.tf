@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "eu-west-3"
 }
 
 variable vpc_cidr_block {}
@@ -7,9 +7,7 @@ variable subnet_1_cidr_block {}
 variable avail_zone {}
 variable env_prefix {}
 variable my_ip {}
-variable public_key_location {}
 variable instance_type {}
-
 
 resource "aws_vpc" "myapp-vpc" {
   cidr_block = var.vpc_cidr_block
@@ -86,22 +84,6 @@ resource "aws_route_table_association" "a-rtb-subnet" {
   route_table_id = aws_route_table.myapp-route-table.id
 }
 
-# Only if we use the main route table instead of creating a new one 
-/*
-resource "aws_default_route_table" "example" {
-  default_route_table_id = aws_vpc.myapp-vpc.default_route_table_id
-
-  route {
-    cidr_block = "10.0.1.0/24"
-    gateway_id = aws_internet_gateway.myapp-igw.id
-  }
-
-  tags = {
-     Name = "${var.env_prefix}-main-rtb"
-   }
-}
-*/
-
 data "aws_ami" "latest-amazon-linux-image" {
     most_recent = true
     owners = ["amazon"]
@@ -115,12 +97,7 @@ data "aws_ami" "latest-amazon-linux-image" {
     }
 }
 
-resource "aws_key_pair" "ssh-key" {
-    key_name = "server-key"
-    public_key = file(var.public_key_location)
-}
-
-resource "aws_instance" "myapp-server" {
+ resource "aws_instance" "myapp-server" {
     ami = data.aws_ami.latest-amazon-linux-image.id
     instance_type = var.instance_type
 
@@ -130,7 +107,7 @@ resource "aws_instance" "myapp-server" {
     availability_zone = var.avail_zone
 
     associate_public_ip_address = true
-    key_name = aws_key_pair.ssh-key.key_name
+    key_name = "myapp-key-pair"
 
     user_data = file("entry-script.sh")
 
