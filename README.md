@@ -199,5 +199,16 @@ resource "aws_instance" "myapp-server" {
 }
 ```
 
+We can also use ansible playbook, actually, it's a best practice. 
+
+```
+ provisioner "local-exec" {
+    working_dir = var.ansible_dir
+    command = "ansible-playbook --inventory ${self.public_ip}, --private-key ${var.private_key_location} --user ec2-user run-docker-with-linux-user.yaml"
+}
+```
+
+Checkout my [ansible playbook](https://github.com/hotiaDiallo/ansible-hands-on/tree/main/run-docker) to deploy docker conatiners
+
 
 

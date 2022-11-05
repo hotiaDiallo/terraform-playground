@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "eu-west-3"
 }
 
 variable vpc_cidr_block {}
@@ -9,6 +9,8 @@ variable env_prefix {}
 variable my_ip {}
 variable public_key_location {}
 variable instance_type {}
+variable ansible_dir{}
+variable private_key_location{}
 
 
 resource "aws_vpc" "myapp-vpc" {
@@ -120,10 +122,10 @@ resource "aws_key_pair" "ssh-key" {
     public_key = file(var.public_key_location)
 }
 
+
 resource "aws_instance" "myapp-server" {
     ami = data.aws_ami.latest-amazon-linux-image.id
     instance_type = var.instance_type
-
     # these arguments are optional : if not set, default value are used
     subnet_id = aws_subnet.myapp-subnet-1.id
     vpc_security_group_ids = [aws_default_security_group.default-sg.id]
@@ -132,18 +134,38 @@ resource "aws_instance" "myapp-server" {
     associate_public_ip_address = true
     key_name = aws_key_pair.ssh-key.key_name
 
-    user_data = file("entry-script.sh")
-
+    // user_data = file("entry-script.sh")
     tags = {
         Name = "${var.env_prefix}-server"
     }
+
+    provisioner "local-exec" {
+      working_dir = var.ansible_dir
+      command = "ansible-playbook --inventory ${self.public_ip}, --private-key ${var.private_key_location} --user ec2-user run-docker-with-linux-user.yaml"
+    } 
+}
+
+output "ec2_public_ip" {
+    value = aws_instance.myapp-server.public_ip
 }
 
 output "aws_ami_id" {
     value = data.aws_ami.latest-amazon-linux-image.id
 }
 
-output "ec2_public_ip" {
-    value = aws_instance.myapp-server.public_ip
+
+/* 
+resource "null_resource" "configure_server" {
+  triggers = {
+    trigger = aws_instance.myapp-server.public_ip
+  }
+
+  provisioner "local-exec" {
+    working_dir = "../ansible"
+    command = "ansible-playbook --inventory ${aws_instance.myapp-server.public_ip}, --private-key ${var.ssh_key_private} --user ec2-user deploy-docker-new-user.yaml"
+  }
 }
+*/
+
+
 
