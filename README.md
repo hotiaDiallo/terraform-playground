@@ -199,6 +199,8 @@ resource "aws_instance" "myapp-server" {
 }
 ```
 
+Checkout the [entry-script.sh file](https://github.com/hotiaDiallo/terraform-playground/blob/deploy-to-ec2/entry-script.sh) for more details
+
 We can also use ansible playbook, actually, it's a best practice. 
 
 ```
